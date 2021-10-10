@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "Ordini",
+  "info": {
+    "name": "Ordini"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ID": {
+      "type": "uid"
+    }
+  }
+}
