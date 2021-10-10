@@ -32,6 +32,9 @@
     },
     "Verificato": {
       "type": "boolean"
+    },
+    "Indirizzo": {
+      "type": "json"
     }
   }
 }

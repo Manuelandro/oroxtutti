@@ -23,17 +23,15 @@
     "Data": {
       "type": "datetime"
     },
-    "Spedizione": {
-      "model": "address"
-    },
     "Tracking": {
       "type": "string"
     },
-    "Prodotti": {
-      "collection": "product"
-    },
     "Quantita": {
       "type": "json"
+    },
+    "Prodotti": {
+      "type": "json",
+      "required": true
     }
   }
 }
