@@ -2,26 +2,28 @@
   "kind": "collectionType",
   "collectionName": "products",
   "info": {
-    "name": "product"
+    "name": "product",
+    "description": ""
   },
   "options": {
     "increments": true,
-    "timestamps": true
+    "timestamps": true,
+    "draftAndPublish": false
   },
   "attributes": {
-    "title": {
+    "Nome": {
       "type": "string",
       "required": true
     },
-    "description": {
+    "Descrizione": {
       "type": "string",
       "required": true
     },
-    "price": {
+    "Prezzo": {
       "type": "float"
     },
-    "image": {
-      "model": "file",
+    "Foto": {
+      "collection": "file",
       "via": "related",
       "allowedTypes": [
         "files",
@@ -29,29 +31,22 @@
         "videos"
       ],
       "plugin": "upload",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
-    "slug": {
+    "Slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "Nome"
     },
-    "categories": {
+    "Categoria": {
       "collection": "category",
       "via": "products"
     },
-    "Custom_field": {
-      "type": "component",
-      "repeatable": true,
-      "component": "custom.custom-field"
+    "Stock": {
+      "type": "integer"
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "draft",
-        "published"
-      ],
-      "default": "published",
-      "required": true
+    "Codice": {
+      "type": "string"
     }
   }
 }

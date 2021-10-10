@@ -28,6 +28,12 @@
     },
     "Tracking": {
       "type": "string"
+    },
+    "Prodotti": {
+      "collection": "product"
+    },
+    "Quantita": {
+      "type": "json"
     }
   }
 }
