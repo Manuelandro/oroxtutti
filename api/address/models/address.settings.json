@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "addresses",
+  "info": {
+    "name": "Address",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Cliente": {
+      "model": "clienti"
+    },
+    "AddressID": {
+      "type": "uid"
+    },
+    "Indirizzo": {
+      "type": "text"
+    },
+    "Citta": {
+      "type": "string"
+    },
+    "Provincia": {
+      "type": "string"
+    },
+    "CAP": {
+      "type": "string"
+    },
+    "Nazione": {
+      "type": "string"
+    },
+    "Note": {
+      "type": "text"
+    }
+  }
+}
