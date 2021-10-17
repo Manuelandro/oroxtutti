@@ -27,23 +27,23 @@ module.exports.createCustomer = async (req, res) => {
     try {
         const { value, error } = createCustomerValidator.validate(req.body)
         if (error) {
-            res.status(300).send(error)
+            res.status(300).send({ error })
             return
         }
 
         const found = await getCustomerExists(req.body.email)
         if (found.length) {
-            res.status(300).send({ message: 'User already exists '})
+            res.status(300).send({ error: 'User already exists '})
             return
         }
 
         const customer = await stripe.customers.create({
             ...value
          });
-        res.send(customer)
+        res.send({ customer })
     } catch (err) {
         console.log(err)
-        res.status(300).send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }
 
@@ -59,16 +59,16 @@ module.exports.createCustomerLogin = async (req, res) => {
     try {
         const { error } = createCustomerLoginValidator.validate(req.body)
         if (error) {
-            res.status(300).send(error)
+            res.status(300).send({ error })
             return
         }
         const { email, password, id } = req.body
         const hashPwd = md5(password)
-        const newCustomer = await setCustomer({ email, password: hashPwd, id })
-        res.send(newCustomer)
+        const customer = await setCustomer({ email, password: hashPwd, id })
+        res.send({ customer })
     } catch (err) {
         console.log(err)
-        res.status(300).send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }
 
@@ -82,26 +82,21 @@ module.exports.customerLogin = async (req, res) => {
     try {
         const { error } = customerLoginValidator.validate(req.body)
         if (error) {
-            res.send(error)
+            res.status(300).send({ error })
             return
         }
         const { email, password } = req.body
         const hashPwd = md5(password)
         const found = await getCustomerLogin(email, hashPwd)
         if (!found.length) {
-            res.status(300).send({ message: 'Incorrect fields'})
+            res.status(300).send({ error: 'Incorrect fields'})
             return
         }
 
-        const token = await createToken({ email, password: hashPwd })
-        const result = await updateCustomer({ email, token })
-        if (!result) {
-            res.status(300).send({ error: "no token created"})
-            return
-        }
+        const token = await createToken({ email, id: found[0].id })
         res.send({ token })
     } catch (err) {
         console.log(err)
-        res.status(300).send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }

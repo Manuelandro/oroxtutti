@@ -10,9 +10,9 @@ module.exports.createPaymentIntent = async (req, res) => {
             currency: 'eur',
         })
 
-        res.send(paymentIntent)
+        res.send({ paymentIntent })
     } catch (err) {
         console.log(err)
-        res.send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }

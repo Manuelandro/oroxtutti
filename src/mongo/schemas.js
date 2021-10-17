@@ -1,6 +1,12 @@
 const { string } = require('joi')
 const mongoose = require('mongoose')
 
+const ItemSchema = new mongoose.Schema({
+    id: String,
+    qty: Number
+})
+
+
 module.exports.CustomerSchema = new mongoose.Schema({
     id: String,
     email: String,
@@ -9,7 +15,6 @@ module.exports.CustomerSchema = new mongoose.Schema({
 })
 
 module.exports.CartSchema = new mongoose.Schema({
-    id: Number,
     customerId: String,
-    items: [String]
+    items: [ItemSchema]
 })

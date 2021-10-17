@@ -10,14 +10,14 @@ module.exports.retrieveProducts = async (req, res) => {
     try {
         const { error } = retrieveProductsValidator.validate(req.body)
         if (error) {
-            res.send(error)
+            res.status(300).send({ error })
             return
         }
         const products = await stripe.products.list({ limit: req.body.limit });
-        res.send(products)
+        res.send({ products })
     } catch (err) {
         console.log(err)
-        res.send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }
 
@@ -30,13 +30,13 @@ module.exports.retrieveProduct = async (req, res) => {
     try {
         const { error } = retrieveProductValidator.validate(req.body)
         if (error) {
-            res.send(error)
+            res.status(300).send({ error })
             return
         }
         const product = await stripe.products.retrieve(req.body.productId);
-        res.send(product)
+        res.send({ product })
     } catch (err) {
         console.log(err)
-        res.send(err.message)
+        res.status(300).send({ error: err.message })
     }
 }

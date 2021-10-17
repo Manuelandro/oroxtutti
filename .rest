@@ -5,6 +5,8 @@
 
 @productId = prod_KPMNSFNUs1AE88
 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoibXBhbG1hLmpvYkBnbWFpbC5jb20iLCJpZCI6ImRra2RrZCJ9LCJleHAiOjE2MzcwOTA5NzUsImlhdCI6MTYzNDQ5ODk3NX0.ox_msHNqLrX5zdhJ4rdPMzYK4MKyI2Xi1WFlySIvSrc
+
 POST http://{{host}}/products/list HTTP/1.1
 content-type: {{contentType}}
 
@@ -57,14 +59,6 @@ content-type: {{contentType}}
     "password": "dldlldldldld"
 }
 
-###
-
-POST http://{{host}}/payment/create HTTP/1.1
-content-type: {{contentType}}
-
-{
-    "amount": 1000
-}
 
 ###
 
@@ -74,4 +68,56 @@ content-type: {{contentType}}
 {
     "email": "mpalma.job@gmail.com",
     "password": "dldlldldldld"
+}
+
+
+
+###
+
+POST http://{{host}}/cart/get HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "token": "{{token}}"
+}
+
+###
+
+POST http://{{host}}/cart/add HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "token": "{{token}}",
+    "itemId": "{{productId}}",
+    "qty": 1
+}
+
+###
+
+POST http://{{host}}/cart/remove HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "token": "{{token}}",
+    "itemId": "{{productId}}"
+}
+
+###
+
+POST http://{{host}}/cart/update HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "token": "{{token}}",
+    "itemId": "{{productId}}",
+    "qty": 3
+}
+
+###
+
+POST http://{{host}}/payment/create HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "amount": 1000
 }
