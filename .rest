@@ -1,0 +1,69 @@
+@hostname = localhost
+@port = 3001
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+@productId = prod_KPMNSFNUs1AE88
+
+POST http://{{host}}/products/list HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "limit": 4
+}
+
+###
+
+POST http://{{host}}/product HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "productId": "{{productId}}"
+}
+
+###
+
+
+POST http://{{host}}/customers/create HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "email": "mpalma.job@gmail.com",
+    "name": "Manuel Palma",
+    "phone": "+393392774663",
+    "shipping": {
+        "address": {
+            "city": "Milano",
+            "country": "Italia",
+            "line1": "via Bramante 20",
+            "line2": "",
+            "postal_code": "20154",
+            "state": "MI"
+        },
+        "name": "Cesare Pistelli",
+        "phone": "+393516195912"
+    }
+}
+
+
+###
+
+POST http://{{host}}/customers/create/login HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "id": "dkkdkd",
+    "email": "mpalma.job@gmail.com",
+    "password": "dldlldldldld"
+}
+
+###
+
+POST http://{{host}}/payment/create HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "amount": 1000
+}
+
+###
