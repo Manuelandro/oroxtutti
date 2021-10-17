@@ -67,3 +67,11 @@ content-type: {{contentType}}
 }
 
 ###
+
+POST http://{{host}}/customers/login HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "email": "mpalma.job@gmail.com",
+    "password": "dldlldldldld"
+}
