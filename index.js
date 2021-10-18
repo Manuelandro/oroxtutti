@@ -11,6 +11,7 @@ const Payments = require('./src/api/Payments')
 
 app.use(express.json())
 app.post('/products/list', Products.retrieveProducts)
+app.post('/products/prices/list', Products.retrievePrices)
 app.post('/product', Products.retrieveProduct)
 app.post('/customers/create', Customers.createCustomer)
 app.post('/customers/create/login', Customers.createCustomerLogin)

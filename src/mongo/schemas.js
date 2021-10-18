@@ -1,9 +1,10 @@
-const { string } = require('joi')
 const mongoose = require('mongoose')
 
 const ItemSchema = new mongoose.Schema({
     id: String,
-    qty: Number
+    qty: Number,
+    price: Number,
+    subtotal: Number
 })
 
 

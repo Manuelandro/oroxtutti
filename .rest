@@ -16,6 +16,15 @@ content-type: {{contentType}}
 
 ###
 
+POST http://{{host}}/products/prices/list HTTP/1.1
+content-type: {{contentType}}
+
+{
+
+}
+
+###
+
 POST http://{{host}}/product HTTP/1.1
 content-type: {{contentType}}
 
@@ -119,5 +128,5 @@ POST http://{{host}}/payment/create HTTP/1.1
 content-type: {{contentType}}
 
 {
-    "amount": 1000
+    "token": "{{token}}"
 }

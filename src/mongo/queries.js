@@ -65,7 +65,26 @@ module.exports.setCustomer = async function(values = {}) {
 module.exports.getCart = async function(customerId) {
     try {
         const connection = await mongoConn()
-        const found = await connection.model('Cart', CartSchema).find({ customerId })
+        const found = await connection.model('Cart', CartSchema).aggregate([
+            {
+                "$match": {
+                    customerId
+                }
+            },
+            {
+                "$addFields": {
+                    "total": {
+                        "$reduce": {
+                            input: "$items",
+                            initialValue: 0,
+                            in: {
+                                $add: ["$$value", "$$this.subtotal"]
+                            }
+                        }
+                    }
+                }
+            }
+        ])
         return found
     } catch (err) {
         console.log(err)
@@ -73,7 +92,7 @@ module.exports.getCart = async function(customerId) {
 }
 
 
-module.exports.createCart = async function(customerId, itemId, qty) {
+module.exports.createCart = async function(customerId, itemId, qty, price) {
     try {
         const connection = await mongoConn()
         const Cart = await connection.model('Cart', CartSchema)
@@ -82,7 +101,9 @@ module.exports.createCart = async function(customerId, itemId, qty) {
             customerId,
             items: [{
                 id: itemId,
-                qty
+                qty,
+                price,
+                subtotal: price * qty
             }]
         })
 
@@ -94,7 +115,27 @@ module.exports.createCart = async function(customerId, itemId, qty) {
     }
 }
 
-module.exports.updateCart = async function(customerId, itemId, qty) {
+module.exports.addCart = async function(customerId, itemId, qty, price) {
+    try {
+        const connection = await mongoConn()
+        const res = await connection.model('Cart', CartSchema).updateOne(
+            {
+                customerId,
+            },
+            {
+                "$push": {
+                    items: { id: itemId, qty, price, subtotal: price * qty }
+                }
+            }
+        )
+
+        return true
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+module.exports.updateCart = async function(customerId, itemId, qty, price) {
     try {
         const connection = await mongoConn()
         const res = await connection.model('Cart', CartSchema).updateOne(
@@ -104,7 +145,8 @@ module.exports.updateCart = async function(customerId, itemId, qty) {
             },
             {
                 "$set": {
-                    "items.$.qty": qty
+                    "items.$.qty": qty,
+                    "items.$.subtotal": qty * price
                 }
             }
         )
@@ -144,3 +186,4 @@ module.exports.deleteCart = async function(customerId) {
         console.log(err)
     }
 }
+

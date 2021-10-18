@@ -34,7 +34,18 @@ module.exports.retrieveProduct = async (req, res) => {
             return
         }
         const product = await stripe.products.retrieve(req.body.productId);
-        res.send({ product })
+        const price = await stripe.prices.list({ product: req.body.productId })
+        res.send({ ...product, price: price.data[0] })
+    } catch (err) {
+        console.log(err)
+        res.status(300).send({ error: err.message })
+    }
+}
+
+module.exports.retrievePrices = async (req, res) => {
+    try {
+        const prices = await stripe.prices.list()
+        res.send({ prices: prices.data })
     } catch (err) {
         console.log(err)
         res.status(300).send({ error: err.message })
