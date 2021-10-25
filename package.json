@@ -17,11 +17,6 @@
   "author": {
     "name": "A Strapi developer"
   },
-  "strapi": {
-    "uuid": "92333ee9-cdc3-41cf-a8ed-8f15be44e3d6",
-    "template": "https://github.com/strapi/strapi-template-ecommerce",
-    "starter": "https://github.com/strapi/strapi-starter-next-ecommerce"
-  },
   "engines": {
     "node": ">=10.16.0 <=14.x.x",
     "npm": "^6.0.0"

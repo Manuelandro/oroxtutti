@@ -5,7 +5,9 @@
 
 @productId = prod_KPMNSFNUs1AE88
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoibXBhbG1hLmpvYkBnbWFpbC5jb20iLCJpZCI6ImRra2RrZCJ9LCJleHAiOjE2MzcwOTA5NzUsImlhdCI6MTYzNDQ5ODk3NX0.ox_msHNqLrX5zdhJ4rdPMzYK4MKyI2Xi1WFlySIvSrc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiZGRkZEBsbGwuaXQiLCJpZCI6ImN1c19LVFAzeFpxRGlyQkQ4MyJ9LCJleHAiOjE2Mzc3NTY3NjIsImlhdCI6MTYzNTE2NDc2Mn0.Di2DNDV7L-cuqwj6kKa8E4KMbAQVcQyF2Tv9CpNzQ70
+
+@secret = pi_3Jo6VgBCuKZVEUTZ1F9nJYEm_secret_Rm1N3e2ilTQpHEnRJ5Hgmdvt4
 
 POST http://{{host}}/products/list HTTP/1.1
 content-type: {{contentType}}
@@ -35,37 +37,23 @@ content-type: {{contentType}}
 ###
 
 
+POST http://{{host}}/product/price HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "productId": "{{productId}}"
+}
+
+###
+
+
+
 POST http://{{host}}/customers/create HTTP/1.1
 content-type: {{contentType}}
 
 {
-    "email": "mpalma.job@gmail.com",
-    "name": "Manuel Palma",
-    "phone": "+393392774663",
-    "shipping": {
-        "address": {
-            "city": "Milano",
-            "country": "Italia",
-            "line1": "via Bramante 20",
-            "line2": "",
-            "postal_code": "20154",
-            "state": "MI"
-        },
-        "name": "Cesare Pistelli",
-        "phone": "+393516195912"
-    }
-}
-
-
-###
-
-POST http://{{host}}/customers/create/login HTTP/1.1
-content-type: {{contentType}}
-
-{
-    "id": "dkkdkd",
-    "email": "mpalma.job@gmail.com",
-    "password": "dldlldldldld"
+    "email": "mpalmae.jobw@gmail.com",
+    "password": "pippo"
 }
 
 
@@ -78,6 +66,12 @@ content-type: {{contentType}}
     "email": "mpalma.job@gmail.com",
     "password": "dldlldldldld"
 }
+
+###
+
+GET http://{{host}}/customers/info HTTP/1.1
+content-type: {{contentType}}
+Authorization: Beared {{token}}
 
 
 
@@ -125,6 +119,15 @@ content-type: {{contentType}}
 ###
 
 POST http://{{host}}/payment/create HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "token": "{{token}}"
+}
+
+###
+
+POST http://{{host}}/payment/method HTTP/1.1
 content-type: {{contentType}}
 
 {

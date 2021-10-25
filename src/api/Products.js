@@ -8,16 +8,17 @@ const retrieveProductsValidator = Joi.object({
 
 module.exports.retrieveProducts = async (req, res) => {
     try {
+        console.log(req.body)
         const { error } = retrieveProductsValidator.validate(req.body)
         if (error) {
-            res.status(300).send({ error })
+            res.status(400).send({ error })
             return
         }
         const products = await stripe.products.list({ limit: req.body.limit });
         res.send({ products })
     } catch (err) {
         console.log(err)
-        res.status(300).send({ error: err.message })
+        res.status(400).send({ error: err.message })
     }
 }
 
@@ -30,7 +31,7 @@ module.exports.retrieveProduct = async (req, res) => {
     try {
         const { error } = retrieveProductValidator.validate(req.body)
         if (error) {
-            res.status(300).send({ error })
+            res.status(400).send({ error })
             return
         }
         const product = await stripe.products.retrieve(req.body.productId);
@@ -42,12 +43,27 @@ module.exports.retrieveProduct = async (req, res) => {
     }
 }
 
+
+module.exports.retrieveSinglePrice = async (req, res) => {
+    try {
+        const price = await stripe.prices.list({
+            product: req.body.productId,
+            active: true
+        })
+        res.send({ price })
+    } catch (err) {
+        console.log(err)
+        res.status(400).send({ error: err.message })
+    }
+}
+
+
 module.exports.retrievePrices = async (req, res) => {
     try {
         const prices = await stripe.prices.list()
         res.send({ prices: prices.data })
     } catch (err) {
         console.log(err)
-        res.status(300).send({ error: err.message })
+        res.status(400).send({ error: err.message })
     }
 }
