@@ -4,22 +4,23 @@ const { getCart, removeFromCart } = require('../../mongo/queries')
 
 
 const removeFromCartValidator = Joi.object({
-    token: Joi.string(),
-    itemId: Joi.string()
+    productId: Joi.string()
 }).options({presence: 'required'});
 
 module.exports = async (req, res) => {
     try {
+        const token = req.headers?.authorization?.split(' ')[1] || ''
+        const payload = await verifyToken(token)
+
         const { error } = removeFromCartValidator.validate(req.body)
         if (error) {
             res.status(300).send({ error })
             return
         }
 
-        const auth = await verifyToken(req.body.token)
-        await removeFromCart(auth.data.id, req.body.itemId)
+        await removeFromCart(payload.data.id, req.body.itemId)
 
-        const [cart2] = await getCart(auth.data.id)
+        const [cart2] = await getCart(payload.data.id)
         res.send({ cart: cart2 })
     } catch (err) {
         console.log(err)

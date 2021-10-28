@@ -5,33 +5,34 @@ const verifyToken = require('../../jwt/verifyToken')
 const { getCart, createCart, addCart } = require('../../mongo/queries')
 
 const addToCartValidator = Joi.object({
-    token: Joi.string(),
-    itemId: Joi.string(),
+    productId: Joi.string(),
     qty: Joi.number()
 }).options({presence: 'required'});
 
 module.exports = async (req, res) => {
     try {
+        const token = req.headers?.authorization?.split(' ')[1] || ''
+        const payload = await verifyToken(token)
+
         const { error } = addToCartValidator.validate(req.body)
         if (error) {
             res.status(300).send({ error })
             return
         }
 
-        const { token, itemId, qty } = req.body
-        const auth = await verifyToken(token)
+        const { productId, qty } = req.body
 
-        const prices = await stripe.prices.list({ product: itemId })
+        const prices = await stripe.prices.list({ product: productId })
         const price = prices.data[0]?.unit_amount
 
-        const [cart] = await getCart(auth.data.id)
+        const [cart] = await getCart(payload.data.id)
         if (!cart) {
-            await createCart(auth.data.id, itemId, qty, price)
+            await createCart(payload.data.id, productId, qty, price)
         } else {
-            await addCart(auth.data.id, itemId, qty, price)
+            await addCart(payload.data.id, productId, qty, price)
         }
 
-        const [cart2] = await getCart(auth.data.id)
+        const [cart2] = await getCart(payload.data.id)
         res.send({ cart: cart2 })
     } catch (err) {
         console.log(err)

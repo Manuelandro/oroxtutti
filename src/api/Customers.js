@@ -8,7 +8,8 @@ const verifyToken = require('../jwt/verifyToken')
 
 const createCustomerValidator = Joi.object({
     email: Joi.string(),
-    password: Joi.string()
+    password: Joi.string(),
+    name: Joi.string()
 }).options({presence: 'required'});
 
 
@@ -22,12 +23,13 @@ module.exports.createCustomer = async (req, res) => {
 
         const found = await getCustomerExists(req.body.email)
         if (found.length) {
-            res.status(300).send({ error: 'User already exists '})
+            res.status(300).send({ error: 'User already exists'})
             return
         }
 
         const customerStripe = await stripe.customers.create({
-            email: req.body.email
+            email: req.body.email,
+            name: req.body.name
          });
 
 
@@ -43,10 +45,8 @@ module.exports.createCustomer = async (req, res) => {
 }
 
 
-const updateCustomerValidator = Joi.object({
+const customerUpdateValidator = Joi.object({
     id: Joi.string(),
-    name: Joi.string(),
-    phone: Joi.string(),
     shipping: Joi.object({
         address: Joi.object({
             city: Joi.string(),
@@ -62,14 +62,29 @@ const updateCustomerValidator = Joi.object({
 }).options({presence: 'required'});
 
 
-module.exports.updateCustomer = async (req, res) => {
+module.exports.customerUpdateShipping = async (req, res) => {
     try {
-        const { value, error } = updateCustomerValidator.validate(req.body)
+        const { value, error } = customerUpdateValidator.validate(req.body)
         if (error) {
             res.status(300).send({ error })
             return
         }
+        const token = req.headers?.authorization?.split(' ')[1] || ''
+        const payload = await verifyToken(token)
+        const [customer] = await getCustomerExists(payload.data.email)
+        if (!customer) {
+            res.status(300).send({ error: 'User not exists'})
+            return
+        }
 
+        const customerUpdated = await stripe.customers.update(
+            req.body.id,
+            {
+                shipping: value.shipping
+            }
+        )
+
+        res.send({ ...customerUpdated })
 
     } catch (err) {
         console.log(err)
@@ -129,3 +144,4 @@ module.exports.customerInfo = async (req, res) => {
         res.status(300).send({ error: err.message })
     }
 }
+

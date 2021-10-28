@@ -7,6 +7,8 @@
 
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiZGRkZEBsbGwuaXQiLCJpZCI6ImN1c19LVFAzeFpxRGlyQkQ4MyJ9LCJleHAiOjE2Mzc3NTY3NjIsImlhdCI6MTYzNTE2NDc2Mn0.Di2DNDV7L-cuqwj6kKa8E4KMbAQVcQyF2Tv9CpNzQ70
 
+@customerId = cus_KUBPXK8hGwLUL8
+
 @secret = pi_3Jo6VgBCuKZVEUTZ1F9nJYEm_secret_Rm1N3e2ilTQpHEnRJ5Hgmdvt4
 
 POST http://{{host}}/products/list HTTP/1.1
@@ -72,6 +74,29 @@ content-type: {{contentType}}
 GET http://{{host}}/customers/info HTTP/1.1
 content-type: {{contentType}}
 Authorization: Beared {{token}}
+
+
+###
+
+POST http://{{host}}/customers/update/shipping HTTP/1.1
+content-type: {{contentType}}
+Authorization: Beared {{token}}
+
+{
+    "id": "{{customerId}}",
+    "shipping": {
+        "address": {
+            "city": "Giugliano in Campania",
+            "country": "IT",
+            "line1": "via Santa Teresa D'Avila 11",
+            "line2": "",
+            "postal_code": 80014,
+            "state": "NA"
+        },
+        "name": "Manuel Palma",
+        "phone": "+393333333333"
+    }
+}
 
 
 

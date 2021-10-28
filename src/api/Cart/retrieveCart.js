@@ -1,22 +1,18 @@
-const Joi = require('joi')
 const verifyToken = require('../../jwt/verifyToken')
 const { getCart } = require('../../mongo/queries')
-
-
-const retrieveCartValidator = Joi.object({
-    token: Joi.string(),
-}).options({presence: 'required'});
+const { getCustomerExists } = require('../../mongo/queries')
 
 module.exports = async (req, res) => {
     try {
-        const { error } = retrieveCartValidator.validate(req.body)
-        if (error) {
-            res.status(300).send({ error })
+        const token = req.headers?.authorization?.split(' ')[1] || ''
+        const payload = await verifyToken(token)
+
+        const [customer] = await getCustomerExists(payload.data.email)
+        if (!customer) {
+            res.status(300).send({ error: 'User not exists'})
             return
         }
-
-        const auth = await verifyToken(req.body.token)
-        const [cart] = await getCart(auth.data.id)
+        const [cart] = await getCart(payload.data.id)
         if (!cart) {
             res.send({ cart: {} })
             return
