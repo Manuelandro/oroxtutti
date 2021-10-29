@@ -92,7 +92,7 @@ module.exports.getCart = async function(customerId) {
 }
 
 
-module.exports.createCart = async function(customerId, itemId, qty, price) {
+module.exports.createCart = async function(customerId, itemId, qty, price, priceId) {
     try {
         const connection = await mongoConn()
         const Cart = await connection.model('Cart', CartSchema)
@@ -103,6 +103,7 @@ module.exports.createCart = async function(customerId, itemId, qty, price) {
                 id: itemId,
                 qty,
                 price,
+                priceId,
                 subtotal: price * qty
             }]
         })
@@ -115,7 +116,7 @@ module.exports.createCart = async function(customerId, itemId, qty, price) {
     }
 }
 
-module.exports.addCart = async function(customerId, itemId, qty, price) {
+module.exports.addCart = async function(customerId, itemId, qty, price, priceId) {
     try {
         const connection = await mongoConn()
         const res = await connection.model('Cart', CartSchema).updateOne(
@@ -124,7 +125,7 @@ module.exports.addCart = async function(customerId, itemId, qty, price) {
             },
             {
                 "$push": {
-                    items: { id: itemId, qty, price, subtotal: price * qty }
+                    items: { id: itemId, qty, price, priceId, subtotal: price * qty }
                 }
             }
         )

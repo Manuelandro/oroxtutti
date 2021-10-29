@@ -5,9 +5,9 @@
 
 @productId = prod_KPMNSFNUs1AE88
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiZGRkZEBsbGwuaXQiLCJpZCI6ImN1c19LVFAzeFpxRGlyQkQ4MyJ9LCJleHAiOjE2Mzc3NTY3NjIsImlhdCI6MTYzNTE2NDc2Mn0.Di2DNDV7L-cuqwj6kKa8E4KMbAQVcQyF2Tv9CpNzQ70
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYW1taW5pc3RyYXppb25lQHNpeHRoY29udGluZW50LmNvbSIsImlkIjoiY3VzX0tVWXFSS3NVeEZTdEh3In0sImV4cCI6MTYzODAyMzc4NywiaWF0IjoxNjM1NDMxNzg3fQ.kS5dwi1FWQRgl0X87ufV6BbOf0m0KMEbJUc45mdwl_Y
 
-@customerId = cus_KUBPXK8hGwLUL8
+@customerId = cus_KUYqRKsUxFStHw
 
 @secret = pi_3Jo6VgBCuKZVEUTZ1F9nJYEm_secret_Rm1N3e2ilTQpHEnRJ5Hgmdvt4
 
@@ -145,10 +145,8 @@ content-type: {{contentType}}
 
 POST http://{{host}}/payment/create HTTP/1.1
 content-type: {{contentType}}
+Authorization: Bearer {{token}}
 
-{
-    "token": "{{token}}"
-}
 
 ###
 

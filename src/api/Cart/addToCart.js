@@ -24,12 +24,13 @@ module.exports = async (req, res) => {
 
         const prices = await stripe.prices.list({ product: productId })
         const price = prices.data[0]?.unit_amount
+        const priceId = prices.data[0]?.id
 
         const [cart] = await getCart(payload.data.id)
         if (!cart) {
-            await createCart(payload.data.id, productId, qty, price)
+            await createCart(payload.data.id, productId, qty, price, priceId)
         } else {
-            await addCart(payload.data.id, productId, qty, price)
+            await addCart(payload.data.id, productId, qty, price, priceId)
         }
 
         const [cart2] = await getCart(payload.data.id)

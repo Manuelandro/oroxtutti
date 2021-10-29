@@ -24,8 +24,9 @@ app.get('/cart/get', Cart.retrieveCart)
 app.post('/cart/add', Cart.addToCart)
 app.delete('/cart/remove', Cart.removeFromCart)
 app.put('/cart/update', Cart.updateQtyInCart)
-app.post('/payment/create', Payments.createPaymentIntent)
-app.post('/payment/method', Payments.createPaymentMethod)
+app.post('/payment/create', Payments.createSession)
+app.post('/payment/webhook', Payments.fulfillOrder)
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

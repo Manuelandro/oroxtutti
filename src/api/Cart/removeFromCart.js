@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
             return
         }
 
-        await removeFromCart(payload.data.id, req.body.itemId)
+        await removeFromCart(payload.data.id, req.body.productId)
 
         const [cart2] = await getCart(payload.data.id)
         res.send({ cart: cart2 })

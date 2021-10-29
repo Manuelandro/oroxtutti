@@ -4,6 +4,7 @@ const ItemSchema = new mongoose.Schema({
     id: String,
     qty: Number,
     price: Number,
+    priceId: String,
     subtotal: Number
 })
 

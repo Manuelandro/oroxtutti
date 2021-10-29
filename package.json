@@ -13,6 +13,7 @@
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "mongoose": "^6.0.11",
+    "nodemailer": "^6.7.0",
     "stripe": "^8.181.0"
   },
   "author": {
