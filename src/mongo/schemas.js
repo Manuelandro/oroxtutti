@@ -20,3 +20,8 @@ module.exports.CartSchema = new mongoose.Schema({
     customerId: String,
     items: [ItemSchema]
 })
+
+module.exports.OrderSchema = new mongoose.Schema({
+    id: String,
+    amount: Number,
+})

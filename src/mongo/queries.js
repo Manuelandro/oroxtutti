@@ -188,3 +188,21 @@ module.exports.deleteCart = async function(customerId) {
     }
 }
 
+
+module.exports.createOrder = async function(orderObj) {
+    try {
+        const connection = await mongoConn()
+        const Order = await connection.model('Order', OrderSchema)
+
+        const newOrder = new Order({
+
+        })
+
+        await newCart.save()
+
+        return newCart
+    } catch (err) {
+        console.log(err)
+    }
+}
+

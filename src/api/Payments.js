@@ -69,10 +69,10 @@ module.exports.createSession = async (req, res) => {
         }
 
         const customerStripe = await stripe.customers.retrieve(payload.data.id)
-
+        console.log(customerStripe)
         const session = await stripe.checkout.sessions.create({
-            customer_email: customerStripe.email.amount,
-            submit_type: 'donate',
+            customer: customerStripe.id,
+            submit_type: 'pay',
             billing_address_collection: 'auto',
             line_items: cart.items.map(item => ({
                 price: item.priceId,
@@ -95,12 +95,21 @@ module.exports.createSession = async (req, res) => {
 
 module.exports.fulfillOrder = async (req, res) => {
     try {
-        const event = req.body;
+        const event = req.body
         switch (event.type) {
-            case 'payment_intent.succeded':
             case 'payment_intent.created':
+                // @todo create order
+                break
+            case 'payment_intent.succeded':
                 const paymentIntent = event.data.object
                 await sendMailOrder(paymentIntent)
+                break
+            case 'payment_intent.canceled':
+                // @todo update order
+                break
+            case 'payment_intent.payment_failed':
+            case 'checkout.session.completed':
+            case 'charge.succeeded':
                 break
             default:
                 //@ todo logger
@@ -110,6 +119,6 @@ module.exports.fulfillOrder = async (req, res) => {
         res.send()
     } catch (err) {
         console.log(err)
-        res.status(300).send({ error: err.message })
+        res.status(400).send({ error: err.message })
     }
 }
