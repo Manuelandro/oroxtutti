@@ -2,6 +2,7 @@
 // Specify Stripe secret api key here
 const Joi = require('joi')
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const logger = require('../loggger')
 const verifyToken = require('../jwt/verifyToken')
 const { getCart, createOrder } = require('../mongo/queries')
 const { sendMailOrder } = require('../mail/index')
@@ -24,8 +25,8 @@ module.exports.createPaymentMethod = async (req, res) => {
 
         res.send({ paymentMethod })
     } catch (err) {
-        console.log(err)
-        res.status(300).send({ error: err.message })
+        logger.child({ ctx: req.body }).error(err.message)
+        res.status(400).send({ error: err.message })
     }
 }
 
@@ -49,8 +50,8 @@ module.exports.createPaymentIntent = async (req, res) => {
 
         res.send({ paymentIntent })
     } catch (err) {
-        console.log(err)
-        res.status(300).send({ error: err.message })
+        logger.child({ ctx: req.body }).error(err.message)
+        res.status(400).send({ error: err.message })
     }
 }
 
@@ -62,7 +63,8 @@ module.exports.createSession = async (req, res) => {
 
         const [cart] = await getCart(payload.data.id)
         if (!cart) {
-            res.status(300).send({ error: "Cart not found" })
+            logger.child({ ctx: req.headers }).warn("Cart not found")
+            res.status(400).send({ error: "Cart not found" })
             return
         }
 
@@ -85,8 +87,8 @@ module.exports.createSession = async (req, res) => {
         res.send({ session })
 
     } catch (err) {
-        console.log(err)
-        res.status(300).send({ error: err.message })
+        logger.child({ ctx: req.body }).error(err.message)
+        res.status(400).send({ error: err.message })
     }
 }
 
@@ -116,7 +118,7 @@ module.exports.fulfillOrder = async (req, res) => {
 
         res.send()
     } catch (err) {
-        console.log(err)
+        logger.child({ ctx: req.body }).error(err.message)
         res.status(400).send({ error: err.message })
     }
 }

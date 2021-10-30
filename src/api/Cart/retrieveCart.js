@@ -1,3 +1,4 @@
+const logger = require('../../loggger')
 const verifyToken = require('../../jwt/verifyToken')
 const { getCart } = require('../../mongo/queries')
 const { getCustomerExists } = require('../../mongo/queries')
@@ -9,7 +10,8 @@ module.exports = async (req, res) => {
 
         const [customer] = await getCustomerExists(payload.data.email)
         if (!customer) {
-            res.status(300).send({ error: 'User not exists'})
+            logger.child({ ctx: req.body }).warn("User not exists")
+            res.status(400).send({ error: 'User not exists'})
             return
         }
         const [cart] = await getCart(payload.data.id)
@@ -20,7 +22,7 @@ module.exports = async (req, res) => {
 
         res.send({ cart })
     } catch (err) {
-        console.log(err)
-        res.status(300).send({ error: err.message })
+        logger.child({ ctx: req.body }).error(err.message)
+        res.status(400).send({ error: err.message })
     }
 }

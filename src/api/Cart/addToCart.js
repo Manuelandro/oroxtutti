@@ -1,6 +1,7 @@
 const Joi = require('joi')
 // Specify Stripe secret api key here
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const logger = require('../../loggger')
 const verifyToken = require('../../jwt/verifyToken')
 const { getCart, createCart, addCart } = require('../../mongo/queries')
 
@@ -16,7 +17,8 @@ module.exports = async (req, res) => {
 
         const { error } = addToCartValidator.validate(req.body)
         if (error) {
-            res.status(300).send({ error })
+            logger.child({ ctx: req.body }).warn(error)
+            res.status(400).send({ error })
             return
         }
 
@@ -36,7 +38,7 @@ module.exports = async (req, res) => {
         const [cart2] = await getCart(payload.data.id)
         res.send({ cart: cart2 })
     } catch (err) {
-        console.log(err)
-        res.status(300).send({ error: err.message })
+        logger.child({ ctx: req.body }).error(err.message)
+        res.status(400).send({ error: err.message })
     }
 }
