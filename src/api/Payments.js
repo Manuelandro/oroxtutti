@@ -3,7 +3,7 @@
 const Joi = require('joi')
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const verifyToken = require('../jwt/verifyToken')
-const { getCart } = require('../mongo/queries')
+const { getCart, createOrder } = require('../mongo/queries')
 const { sendMailOrder } = require('../mail/index')
 
 
@@ -60,8 +60,6 @@ module.exports.createSession = async (req, res) => {
         const token = req.headers?.authorization?.split(' ')[1] || ''
         const payload = await verifyToken(token)
 
-        console.log(payload.data.id)
-
         const [cart] = await getCart(payload.data.id)
         if (!cart) {
             res.status(300).send({ error: "Cart not found" })
@@ -69,7 +67,6 @@ module.exports.createSession = async (req, res) => {
         }
 
         const customerStripe = await stripe.customers.retrieve(payload.data.id)
-        console.log(customerStripe)
         const session = await stripe.checkout.sessions.create({
             customer: customerStripe.id,
             submit_type: 'pay',
@@ -84,6 +81,7 @@ module.exports.createSession = async (req, res) => {
             cancel_url: `${process.env.REDIRECT_URL}/cancel`
         })
 
+        await createOrder(session)
         res.send({ session })
 
     } catch (err) {

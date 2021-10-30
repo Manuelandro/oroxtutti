@@ -1,5 +1,5 @@
 const mongoConn = require('./connection')
-const { CustomerSchema, CartSchema } = require('./schemas')
+const { CustomerSchema, CartSchema, OrderSchema } = require('./schemas')
 
 /**
  *  CUSTOMER
@@ -195,12 +195,15 @@ module.exports.createOrder = async function(orderObj) {
         const Order = await connection.model('Order', OrderSchema)
 
         const newOrder = new Order({
-
+            amount_total: orderObj.amount_total,
+            customer: orderObj.customer,
+            payment_intent: orderObj.payment_intent,
+            payment_status: orderObj.payment_status
         })
 
-        await newCart.save()
+        await newOrder.save()
 
-        return newCart
+        return newOrder
     } catch (err) {
         console.log(err)
     }

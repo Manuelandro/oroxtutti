@@ -22,6 +22,8 @@ module.exports.CartSchema = new mongoose.Schema({
 })
 
 module.exports.OrderSchema = new mongoose.Schema({
-    id: String,
-    amount: Number,
+    amount_total: Number,
+    customer: String,
+    payment_intent: String,
+    payment_status: String
 })
