@@ -8,6 +8,18 @@ const ItemSchema = new mongoose.Schema({
     subtotal: Number
 })
 
+const AddressSchema = new mongoose.Schema({
+    name: String,
+    phone: String,
+    address: {
+        city: String,
+        country: String,
+        line1: String,
+        line2: String,
+        postal_code: String,
+        state: String
+    }
+})
 
 module.exports.CustomerSchema = new mongoose.Schema({
     id: String,
@@ -24,6 +36,8 @@ module.exports.CartSchema = new mongoose.Schema({
 module.exports.OrderSchema = new mongoose.Schema({
     amount_total: Number,
     customer: String,
+    items: [ItemSchema],
     payment_intent: String,
-    payment_status: String
+    payment_status: String,
+    shipping: AddressSchema
 })

@@ -149,19 +149,28 @@ module.exports.deleteCart = async function(customerId) {
 }
 
 
-module.exports.createOrder = async function(orderObj) {
+module.exports.createOrder = async function(orderObj, items, shipping) {
     const connection = await mongoConn()
     const Order = await connection.model('Order', OrderSchema)
 
     const newOrder = new Order({
         amount_total: orderObj.amount_total,
         customer: orderObj.customer,
+        items,
         payment_intent: orderObj.payment_intent,
-        payment_status: orderObj.payment_status
+        payment_status: orderObj.payment_status,
+        shipping
     })
 
     await newOrder.save()
 
     return newOrder
+}
+
+module.exports.getOrder = async function(payment_intent, customer) {
+    const connection = await mongoConn()
+    const found = await connection.model('Order', OrderSchema).find({ payment_intent, customer })
+
+    return found
 }
 

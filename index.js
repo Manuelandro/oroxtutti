@@ -9,6 +9,7 @@ const Products = require('./src/api/Products')
 const Customers = require('./src/api/Customers')
 const Cart = require('./src/api/Cart')
 const Payments = require('./src/api/Payments')
+const Orders = require('./src/api/Orders')
 
 app.use(cors())
 app.use(express.json())
@@ -24,8 +25,11 @@ app.get('/cart/get', Cart.retrieveCart)
 app.post('/cart/add', Cart.addToCart)
 app.delete('/cart/remove', Cart.removeFromCart)
 app.put('/cart/update', Cart.updateQtyInCart)
-app.post('/payment/create', Payments.createSession)
+app.post('/payment/session/create', Payments.createSession)
+app.post('/payment/session/get', Payments.retrieveSession)
 app.post('/payment/webhook', Payments.fulfillOrder)
+app.get('/orders/list', Orders.getOrders)
+app.post('/orders/order', Orders.getOrder)
 
 
 app.listen(port, () => {

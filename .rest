@@ -156,3 +156,10 @@ content-type: {{contentType}}
 {
     "token": "{{token}}"
 }
+
+
+###
+
+GET http://{{host}}/orders/list HTTP/1.1
+content-type: {{contentType}}
+Authorization: Bearer {{token}}
